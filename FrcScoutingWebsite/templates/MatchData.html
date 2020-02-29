@@ -9,11 +9,15 @@
     </head>
     <body>
         {% for table in tables %}
-            {{ table|safe }}
+            <h3>{{table[1]|safe}}</h3>
+            {{ table[0]|safe }}
         {% endfor %}
     </body>
 </html>
 <style>
+    h3{
+        text-align: center;
+    }
     table {
        margin: 30px;
       border-collapse: collapse;
