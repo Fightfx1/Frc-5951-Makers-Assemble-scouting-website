@@ -1,0 +1,55 @@
+<script src="https://code.iconify.design/1/1.0.4/iconify.min.js"></script>
+{% extends "bootstrap/base.html" %}
+
+{% block head %}
+    {{ super() }}
+    {% if title %}
+    <title> {{ title }}</title>
+    {% else %}
+    <title> </title>
+    {% endif %}
+{% endblock %}
+
+{% block navbar %} 
+    <ul class="nav nav-pills" style="border: 1px; background-color: rgb(182, 207, 236);">
+    
+        <li class="nav-item">
+           <a class="nav-link active" href="{{ url_for('index_page') }}" style="size: 24px; color: black;">Home</a>
+        </li>
+        {% if session['logged_in'] %}
+            
+            <li class="nav-item" style="size: 12px; color: black;">
+                <a class="nav-link active" href="{{ url_for('all_matches_page') }}"  style="size: 24px; color: black;">Matches Data</a>
+            </li>
+            <li class="nav-item" style="size: 12px; color: black;">
+                <a class="nav-link active" href="{{ url_for('settings_page') }}"  style="size: 24px; color: black;">Set Up</a>
+            </li>
+            <li class="nav-item" style="size: 12px; color: black;">
+                <a class="nav-link active" href="{{ url_for('logout_page') }}"  style="size: 24px; color: black;">Logout <span class="iconify" data-icon="octicon-sign-out" data-inline="true"></span></a>
+            </li>
+            
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link active" href="{{ url_for('login_page') }}" style="size: 24px; color: black;">Login</a>
+            </li>
+        {% endif %}  
+</ul>
+<br/>
+{% endblock %}
+
+<body>
+
+<hr>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% block content %}{% endblock %}
+</body>
+
+

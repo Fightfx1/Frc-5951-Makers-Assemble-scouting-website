@@ -1,0 +1,2 @@
+from FrcScoutingWebsite.Forms.LoginForm import LoginForm
+from FrcScoutingWebsite.Forms.SettingForm import SettingsForm

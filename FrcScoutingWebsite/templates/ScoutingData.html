@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Scouting Data</title>
+    </head>
+    <body>
+        {% for table in tables %}
+            {{ table|safe }}
+        {% endfor %}
+    </body>
+</html>
+<style>
+    table {
+       margin: 30px;
+      border-collapse: collapse;
+      width: 90%;
+    }
+    table,th,td {
+      border: 1px solid black;
+    }
+    
+    th, td {
+      text-align: left;
+      padding: 8px;
+      text-align: center;
+    }
+    .Statistics{
+        text-align: center;
+        
+    }
+    .StatisticsText{
+        size: 24px;
+    }
+    div.ReloadBtn{
+        size: 24px;
+        margin: 30px;
+        float: right;
+        padding: 8px;
+    }
+
+</style>
+
+{% endblock %}
+
+
+
