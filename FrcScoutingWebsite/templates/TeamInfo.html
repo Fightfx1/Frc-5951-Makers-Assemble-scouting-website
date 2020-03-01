@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+<html>
+    <div class="DataTable">
+        {% for table in tables %}
+            {{ table|safe }}
+        {% endfor %}
+    </div>
+    <div class="Plots">
+        <img style="height:400px" src="data:image/png;base64, {{plots.Climb_Plot|safe}}">
+        <img style="height:400px" src="data:image/png;base64, {{plots.Balls_Plot|safe}}">
+        <img style="height:400px" src="data:image/png;base64, {{plots.Auton_Balls_Plot|safe}}">
+        <img style="height:400px" src="data:image/png;base64, {{plots.roullte_Plot[0]|safe}}">
+        <img style="height:400px" src="data:image/png;base64, {{plots.roullte_Plot[1]|safe}}">
+        <img style="height:400px" src="data:image/png;base64, {{plots.broken_or_dc_plot|safe}}">
+    </div>
+    <table style=" border: 0px solid black; text-align: center; margin: 30px;">
+        <td style=" border: 0px solid black; ">
+            <h3 style="text-decoration: underline;"> {{text_boxs.Header1|safe}} </h3> 
+            <p>
+                * Weight: {{text_boxs.Weight|safe}} kg
+            </p>
+            <p>
+                * Drive type: {{text_boxs.Propulsion_type|safe}}
+            </p>
+            <p>
+                * Motor Gear Ratio: {{text_boxs.Paddle_conversion|safe}}
+            </p>
+            <p>
+                * Amount of motors on each side: {{text_boxs.Amount_of_propulsion_engines|safe}}
+            </p>
+        </td>
+        <td style=" border: 0px solid black; ">
+            <h3 style="text-decoration: underline;"> {{text_boxs.Header2|safe}} </h3> 
+            <p>
+                * Averge of balls teleop to Hole: {{text_boxs.Telep_Avg_Of_Balls_Hole|safe}}
+                <br/>
+                * Averge of balls teleop to Hex: {{text_boxs.Telep_Avg_Of_Balls_Hex|safe}}
+                <br/>
+                * Averge of balls teleop to Low: {{text_boxs.Telep_Avg_Of_Balls_Low|safe}}
+            </p>
+            <p>
+                * Averge of balls autonmus to Hole: {{text_boxs.Autonomous_Avg_Of_Balls_Hole|safe}}
+                <br/>
+                * Averge of balls autonmus to Hex: {{text_boxs.Autonomous_Avg_Of_Balls_Hex|safe}}
+                <br/>
+                * Averge of balls autonmus to Low: {{text_boxs.Autonomous_Avg_Of_Balls_Low|safe}}
+            </p>
+        </td>
+        <td style=" border: 0px solid black; ">
+            <h3 style="text-decoration: underline;"> {{text_boxs.Header3|safe}} </h3> 
+            <p>
+                * {{text_boxs.whenshot_teleop|safe}}
+            </p>
+            <p>
+                * {{text_boxs.whereshot_autonomuous|safe}}
+            </p>
+            <p>
+                * Does the robot have auton: {{text_boxs.have_auton|safe}}
+            </p>
+            <p>
+                * Where the robot can climb: {{text_boxs.where_he_can_climb|safe}}
+            </p>
+            <p>
+                * Can the robot move on the bar: {{text_boxs.can_move_on_bar|safe}}
+            </p>
+            <p>
+                * Can the robot climb with more robots: {{text_boxs.can_climb_with_more_robots|safe}}
+            </p>
+        </td>
+        <td style=" border: 0px solid black; ">
+            <h3 style="text-decoration: underline;"> {{text_boxs.Header4|safe}} </h3> 
+            <p>
+                * Passing under the roulette: {{text_boxs.Move_down_roll|safe}}
+            </p>
+            <p>
+                * Can Do Defense: {{text_boxs.can_do_deffend|safe}}
+            </p>
+            <p>
+                *  Robot Auton Route option: {{text_boxs.route_options|safe }}
+            </p>
+            <p>
+                * Robot shooting options: {{text_boxs.where_shoting|safe }}
+            </p>
+            <p>
+                * Shooting location: {{text_boxs.from_were_he_can_shot|safe }}
+            </p>
+            <p>
+                * Dose The Robot Can do Rollet: {{text_boxs.can_make_rollet|safe }}
+            </p>
+        </td>
+    </table>  
+
+</html>
+
+<style>
+    div.DataTable {
+       margin: 30px;
+      border-collapse: collapse;
+      width: 90%;
+
+    }
+    table,th,td {
+      border: 1px solid black;
+    }
+    div.StatisticTable{
+        margin: 30px;
+        text-align: center;
+        padding: 8px;
+        font-size: 16px;
+    }
+    
+    th, td {
+      text-align: left;
+      padding: 8px;
+      text-align: center;
+    }
+</style>
+{% endblock %}

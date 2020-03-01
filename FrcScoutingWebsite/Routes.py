@@ -1,4 +1,4 @@
-from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule
+from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule, SaveDataFrameOf_Games
 from flask import render_template, request, url_for, redirect, session
 from FrcScoutingWebsite.Forms import LoginForm, SettingsForm
 
@@ -7,19 +7,49 @@ from FrcScoutingWebsite.Forms import LoginForm, SettingsForm
 def index_page():
     return render_template('index.html')
 
-
-
-
-
 @app.route("/Matches")
 def all_matches_page():
-    Schedule_lib = Schedule(settings_lib.get_season(),settings_lib.get_EventCode(),settings_lib.get_tournamentLevel())
-    df = Schedule_lib.get_all_matches_in_datafarme()
-    df['Match Number'] = df['Match Number'].apply(lambda x: f'<a href="{url_for("match_data",match_numebr=x)}">{x}</a>')
-    return render_template('ScoutingData.html',tables=[df.style.hide_index().render()])
+    def make_click_able(df):
+        df['Match Number'] = df['Match Number'].apply(lambda x: f'<a href="{url_for("match_data",match_numebr=x)}">{x}</a>')
+        df['Blue1'] = df['Blue1'].apply(lambda x: f'<a href="{url_for("team_info_page",TeamNumber=x)}">{x}</a>')
+        df['Blue2'] = df['Blue2'].apply(lambda x: f'<a href="{url_for("team_info_page",TeamNumber=x)}">{x}</a>')
+        df['Blue3'] = df['Blue3'].apply(lambda x: f'<a href="{url_for("team_info_page",TeamNumber=x)}">{x}</a>')
+        df['Red1'] = df['Red1'].apply(lambda x: f'<a href="{url_for("team_info_page",TeamNumber=x)}">{x}</a>')
+        df['Red2'] = df['Red2'].apply(lambda x: f'<a href="{url_for("team_info_page",TeamNumber=x)}">{x}</a>')
+        df['Red3'] = df['Red3'].apply(lambda x: f'<a href="{url_for("team_info_page",TeamNumber=x)}">{x}</a>')
+    
+    # ===========================================speed up network shit============================================================
+    if SaveDataFrameOf_Games.get_dataframe is None:
+        Schedule_lib = Schedule(settings_lib.get_season(),settings_lib.get_EventCode(),settings_lib.get_tournamentLevel())
+        df = Schedule_lib.get_all_matches_in_datafarme()
+        make_click_able(df)
+        SaveDataFrameOf_Games.set_dataframe(df,settings_lib.get_EventCode())
+    
+    elif not SaveDataFrameOf_Games.get_event() is None and SaveDataFrameOf_Games.get_event() == settings_lib.get_EventCode():
+        df = SaveDataFrameOf_Games.get_dataframe()
+    
+    else:
+        Schedule_lib = Schedule(settings_lib.get_season(),settings_lib.get_EventCode(),settings_lib.get_tournamentLevel())
+        df = Schedule_lib.get_all_matches_in_datafarme()
+        make_click_able(df)
+        SaveDataFrameOf_Games.set_dataframe(df,settings_lib.get_EventCode())
+    # =============================================================================================================================
+    
+
+    def color_blue_at_blue(val):
+        return 'background-color: #EEEEFF; color: #3F51B5'
+    def color_blue_at_red(val):
+        return 'background-color: #FFEEEE; color: #3F51B5'
+
+    
+    s = df.style.applymap(color_blue_at_blue,subset=['Blue1','Blue2','Blue3'])
+    s = s.applymap(color_blue_at_red,subset=['Red1','Red2','Red3'])
+    
+    
+    return render_template('ScoutingData.html',tables=[s.hide_index().render()])
 
 
-
+ 
 
 
 @app.route('/SettingsPage',methods=['GET','POST'])
