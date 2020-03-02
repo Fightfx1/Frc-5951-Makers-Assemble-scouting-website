@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<html>
+    {% block table %}
+        {% for table in tables %}
+            {{ table|safe }}
+        {% endfor %}
+    {% endblock table %}
+</html>
+
+
+
+{% endblock %}
+

@@ -1,2 +1,3 @@
 from FrcScoutingWebsite.Forms.LoginForm import LoginForm
 from FrcScoutingWebsite.Forms.SettingForm import SettingsForm
+from FrcScoutingWebsite.Forms.AddScouterForm import AddMemberToTeam_Form

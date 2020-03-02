@@ -36,6 +36,9 @@ class Settings:
         self.__json_data['season'] = season
         self.__update()
     
+    def get_scouters(self,team_name):
+        if team_name in self.__json_data['Scouters_Teams']:
+            return self.__json_data['Scouters_Teams'][team_name]
     def create_scouting_team(self,team_name):
         if team_name not in self.__json_data['Scouters_Teams']:
             self.__json_data['Scouters_Teams'][team_name] = []

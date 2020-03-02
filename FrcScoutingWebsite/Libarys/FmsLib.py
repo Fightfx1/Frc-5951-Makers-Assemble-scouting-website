@@ -66,7 +66,7 @@ class Schedule:
         i = 0
 
         for scouter in scouters:
-            if scouter not in lastgroup and i < 7:
+            if scouter not in lastgroup and i < 6:
                 i+=1
                 team.append(scouter['Name'])
                 scouter['CountThatDid']+=6
@@ -79,6 +79,7 @@ class Schedule:
         for match_number in range(len(df)):
             if i == 5:
                 scouters_team = self.__get_new_team(scouters,last_group)
+                print(scouters_team)
                 df.loc[match_number-0.5] = [f"{match_number+1}-{match_number+6}"] + (scouters_team)
                 last_group = scouters_team
                 i = 0
@@ -91,6 +92,8 @@ class Schedule:
             self.__append_scouters(self.__df,scouters)
             self.__df = self.__df.sort_index()
             return self.__df
+        
+        
         df = self.get_all_matches_in_datafarme()
         scouters = self.__create_scouters_cards(scouters) # create scouters cards
         self.__append_scouters(df,scouters)

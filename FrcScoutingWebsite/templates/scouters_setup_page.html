@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<html>
+    <div class="header">
+        <h1>{{districName|safe}}</h1>
+    </div>
+    <br/>
+    <div class="ScoutersNames">
+        <table class="ScoutersNamesTable">
+            <td class="ScoutersNamesTable">
+                Name:
+            </td>
+            {%for scouter in ScoutersNames%}
+            <tr>
+                <td class="ScoutersNamesTable">
+                    {{scouter|safe}}
+                </td>
+            </tr>
+            {%endfor%}
+        </table>
+    </div>
+    <div class="Forms">
+        <div>
+            <div style="display: inline-block;">
+                <form action="" method="post" novalidate>
+                    {{ add_scouter_form.hidden_tag() }}
+                    <div style="display: inline-block;">
+                        {{ add_scouter_form.MemberName.label }}
+                        {{ add_scouter_form.MemberName(size=18) }}
+                        {{ add_scouter_form.submit() }}
+                    </div>
+                </form>
+            </div>
+            <br/>
+        <div  style="display: inline-block;">
+            <form action="" method="POST">
+                Enter name remove:
+            <select name = "Names" style="min-width: 170px; height: 27px;">
+                    {% for Name in ScoutersNames%}
+                        <option value={{Name}}>{{Name}}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Remove">
+            </form>
+        </div>
+    </div>
+</html>
+<style>
+    .header {
+        padding: 60px;
+        text-align: center;
+        background: #1abc9c;
+        color: white;
+        font-size: 30px;
+    }
+    .ScoutersNamesTable {
+      border: 1px solid black;
+      text-align: center;
+      padding: 20px 60px;
+      display: flex;
+      margin-left: auto;
+      margin-right: auto;
+      
+    }
+    .Forms{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: 30px;
+        font-size: 16px;
+        font-style: normal;
+        font-weight:normal;
+    }
+</style>
+{% endblock %}
