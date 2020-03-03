@@ -119,6 +119,26 @@ def render_plot():
 
 
 
+@app.route('/EventStatus')
+def Event_Status_page():
+    df = save_data_frame.get_dataframe()
+    
+    if df is None:
+        save_data_frame.set_dataframe()
+        df = save_data_frame.get_dataframe()
+    df = df.groupby('Team Number')['T_Hole','T_Hex','T_Low'].mean()
+    df = df.sort_values(by=['T_Hole','T_Hex','T_Low'],ascending=True)
+    ax = df.plot(kind='barh',colormap='jet',figsize=(20,30),zorder=2, width=0.5,align='center',linestyle=':')
+    for p in ax.patches:
+        plt.text(p.get_x() + p.get_width()+0.019, p.get_y()+0.017,str(np.ceil(p.get_width())))
+    plot1 = render_plot()
+    return render_template('EventStatus.html',plot1=plot1)
+
+
+
+
+
+
 
 def create_plot_for_climb(df):
     df['Climb'] = df.Climb.astype('bool')

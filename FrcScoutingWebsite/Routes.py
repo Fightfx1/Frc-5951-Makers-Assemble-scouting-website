@@ -105,6 +105,7 @@ def scouters_setup_page():
 
 
 
+
 @app.route('/Login',methods=['GET','POST'])
 def login_page():
     login_form = LoginForm()
