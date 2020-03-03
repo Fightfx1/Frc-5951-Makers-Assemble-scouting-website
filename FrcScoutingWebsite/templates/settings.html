@@ -5,22 +5,29 @@
 <html>
     <br/>
     <br/>
-    <form action="#" method="post" style="font-size: 24px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; ">
-        {{ settings_form.EventCode.label}}
-        {{ settings_form.EventCode }}
-        <br/>
-        {{ settings_form.Season.label}}
-        {{ settings_form.Season }}
-        <br/>
-        {{ settings_form.tournamentLevel.label}}
-        {{settings_form.tournamentLevel}}
-        <br/>
-        {{settings_form.submit}}
-        {{ settings_form.csrf_token }}
-    </form>
+    <div class="main">
+        <form action="#" method="post" style="font-size: 24px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; ">
+            {{ settings_form.EventCode.label}}
+            {{ settings_form.EventCode }}
+            <br/>
+            {{ settings_form.Season.label}}
+            {{ settings_form.Season }}
+            <br/>
+            {{ settings_form.tournamentLevel.label}}
+            {{settings_form.tournamentLevel}}
+            <br/>
+            {{settings_form.submit}}
+            {{ settings_form.csrf_token }}
+        </form>
+    </div>
 </html>
 
 <style>
+    .main{
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
     label{
         font-style: oblique;
     }

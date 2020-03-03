@@ -77,7 +77,17 @@ def Schedule_Page():
 
     scouting_sc = Schedule(settings_lib.get_season(),settings_lib.get_EventCode(),settings_lib.get_tournamentLevel())
     df = scouting_sc.Get_Scouting_Schedule(settings_lib.get_scouters(settings_lib.get_EventCode()))
-    return render_template('ScoutingSchedule.html',tables=[df.style.render()])
+    s = df.style.hide_index()
+    def color_blue_at_blue(val):
+        return 'background-color: #EEEEFF; color: #3F51B5'
+    def color_blue_at_red(val):
+        return 'background-color: #FFEEEE; color: #3F51B5'
+
+    
+    s = df.style.applymap(color_blue_at_blue,subset=['Blue1','Blue2','Blue3'])
+    s = s.applymap(color_blue_at_red,subset=['Red1','Red2','Red3'])
+
+    return render_template('ScoutingSchedule.html',tables=[s.hide_index().render()])
 
 @app.route('/Scouters_setup',methods=['GET','POST'])
 def scouters_setup_page():
