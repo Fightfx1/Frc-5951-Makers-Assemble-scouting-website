@@ -1,4 +1,4 @@
-from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule, SaveDataFrameOf_Games
+from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule, SaveDataFrameOf_Games,scouters_lib
 from flask import render_template, request, url_for, redirect, session
 from FrcScoutingWebsite.Forms import LoginForm, SettingsForm,AddMemberToTeam_Form
 
@@ -91,16 +91,17 @@ def Schedule_Page():
 
 @app.route('/Scouters_setup',methods=['GET','POST'])
 def scouters_setup_page():
-    settings_lib.create_scouting_team(settings_lib.get_EventCode())
+    if scouters_lib.EventCode != settings_lib.get_EventCode():
+        scouters_lib.update_event_code(settings_lib.get_EventCode())
     add_scouter_form = AddMemberToTeam_Form()
-    
     if request.method == "POST":
         if add_scouter_form.is_submitted() and add_scouter_form.validate_on_submit and 'submit' in request.form:
-            settings_lib.add_scouter_to_team(settings_lib.get_EventCode(),add_scouter_form.MemberName.data)
+            scouters_lib.add_new_scouter(add_scouter_form.MemberName.data)
         elif request.form.get('Names') is not None:
-            settings_lib.remove_scouter_from_team(settings_lib.get_EventCode(),request.form.get('Names'))
+            scouters_lib.delete_scouter(request.form.get('Names'))
         return redirect(url_for('scouters_setup_page'))
-    return render_template('scouters_setup_page.html',ScoutersNames=settings_lib.get_scouters(settings_lib.get_EventCode()),districName="District: "+str(settings_lib.get_EventCode()).capitalize(),add_scouter_form=add_scouter_form)
+        
+    return render_template('scouters_setup_page.html',ScoutersNames=scouters_lib.get_all_scouters_names(),districName="District: "+str(settings_lib.get_EventCode()).capitalize(),add_scouter_form=add_scouter_form)
 
 
 

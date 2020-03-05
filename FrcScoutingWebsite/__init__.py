@@ -5,6 +5,7 @@ from FrcScoutingWebsite.Libarys.SettingsLib import Settings
 from FrcScoutingWebsite.Libarys.FmsLib import Schedule
 from FrcScoutingWebsite.Libarys.DataFrame import SaveDataFrame, SaveDataFrameOfGames
 from FrcScoutingWebsite.Libarys.SpredSheetLib import SpreadSheetLib
+from FrcScoutingWebsite.Libarys.ScoutersLib.Scouters_Lib import Scouters
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
@@ -12,6 +13,7 @@ bootstrap = Bootstrap(app)
 
 users_lib = Users_Lib("FrcScoutingWebsite/JsonFiles/UsersLogininfo.json")
 settings_lib = Settings('FrcScoutingWebsite/JsonFiles/settings.json')
+scouters_lib = Scouters('FrcScoutingWebsite/Libarys/ScoutersLib/', settings_lib.get_EventCode())
 
 
 SpreadSheet_Lib = SpreadSheetLib({
