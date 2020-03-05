@@ -35,6 +35,10 @@ class Scouters:
     def __get_scouter(self,Scouter_Name):
         return next((x for x in self.__scouters_list if x.Scouter_Name == Scouter_Name), None)
 
+
+    def get_scouter(self,Scouter_Name):
+        return self.__get_scouter(Scouter_Name)
+
     def get_all_scouters_names(self):
         return [scouter.Scouter_Name for scouter in self.__scouters_list]
 
