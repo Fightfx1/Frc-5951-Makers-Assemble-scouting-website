@@ -45,14 +45,16 @@ class SpreadSheetLib:
             "T_Hole":int(data['כדורים לחור במשושה (טלאופ)']),
             "T_Hex":int(data['כדורים למשושה (טלאופ)']),
             "T_Low":int(data['כדורים לנמוך (טלאופ)']),
-                    
-            "Climb":data['האם טיפס?'] == "TRUE",
+
+            "Tried_To_Climb":data['האם הרובוט ניסה לטפס?'] == "TRUE",
+            "Succeeded_Climb":data['האם הצליח לטפס?']== "TRUE",
             "Generator Switch Level":data['האם באר הטיפוס מאוזן?'] == "TRUE",
             "Park":data['האם הרובוט חנה באזור הנדנדה?'] == "TRUE",
             "Was_Broken_or_dc":data['האם הרובוט הפסיק לעבוד/נשבר/איבד תקשורת באמצע המקצה?'] == "TRUE",
             "comments":data["הערות (הגנה, טיפוס זוגי וכו')"]
 
         }
+
         return fixed_data
     
     def __fix_all_regular_scouting_data(self,data_to_fix):

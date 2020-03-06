@@ -73,7 +73,7 @@ def fix_columns_names(df):
         ("Autonomous","Starting Power Cells"),('Autonomous',"Hole"),('Autonomous',"Hex"),('Autonomous',"Low"),
         ('Autonomous',"Cross_Line"),
         ("Teleop","Spin_Wheel"),("Teleop","Spin by color"),("Teleop","Hole"),("Teleop","Hex"),("Teleop","Low"),
-        ("End Game","Climb",),("End Game","Generator Switch Level"),("End Game","Park"),("End Game","Disconnect or Was broken"),("End Game","comments")
+        ("End Game","Tried To Climb"),("End Game","Succeeded Climb"),("End Game","Generator Switch Level"),("End Game","Park"),("End Game","Disconnect or Was broken"),("End Game","comments")
     ]
 
     columns = pd.MultiIndex.from_tuples(columns)    
@@ -141,8 +141,8 @@ def Event_Status_page():
 
 
 def create_plot_for_climb(df):
-    df['Climb'] = df.Climb.astype('bool')
-    df['Climb'].value_counts(dropna=True).plot.pie(shadow=True,autopct='%1.2f%%',legend=True, colormap='jet').add_artist(plt.Circle((0,0),0.70,fc='white'))
+    df['Succeeded_Climb'] = df.Succeeded_Climb.astype('bool')
+    df['Succeeded_Climb'].value_counts(dropna=True).plot.pie(shadow=True,autopct='%1.2f%%',legend=True, colormap='jet').add_artist(plt.Circle((0,0),0.70,fc='white'))
     return render_plot() 
 def create_plot_for_balls(df):
     df.plot(y=['T_Hole','T_Hex','T_Low'],x='Match Number',kind='line', colormap='jet', marker='.',markersize=10,title="Teleop balls plot")
@@ -159,9 +159,25 @@ def create_broken_or_dc_plot(df):
     df['Was_Broken_or_dc'].value_counts(dropna=True).plot.pie(shadow=True,autopct='%1.2f%%',legend=True, colormap='jet').add_artist(plt.Circle((0,0),0.70,fc='white'))
     return render_plot()
 
+
 @app.route('/GameData/TeamInfo/<TeamNumber>',methods=['GET', 'POST'])
 def team_info_page(TeamNumber):
     
+    def color_false_true(val):
+        color = 'black'
+        if val == True and type(val) is bool:
+            color = 'green'
+        elif val == False and type(val) is bool:
+            color = 'red'
+        elif val == "BLUE":
+            color = 'blue'
+        elif val == "RED":
+            color = 'red'
+
+        return 'color: %s' % color
+
+
+
     df = save_data_frame.get_dataframe()
     
     if df is None:
@@ -188,4 +204,4 @@ def team_info_page(TeamNumber):
     
     
     fix_columns_names(df)
-    return render_template('TeamInfo.html',tables=[df.style.hide_index().render()],plots=plots,text_boxs=text_boxs)
+    return render_template('TeamInfo.html',tables=[df.style.applymap(color_false_true).hide_index().render()],plots=plots,text_boxs=text_boxs)

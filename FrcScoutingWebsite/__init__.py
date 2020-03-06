@@ -6,6 +6,7 @@ from FrcScoutingWebsite.Libarys.FmsLib import Schedule
 from FrcScoutingWebsite.Libarys.DataFrame import SaveDataFrame, SaveDataFrameOfGames
 from FrcScoutingWebsite.Libarys.SpredSheetLib import SpreadSheetLib
 from FrcScoutingWebsite.Libarys.ScoutersLib.Scouters_Lib import Scouters
+from FrcScoutingWebsite.Libarys.FireBaseLib import FireBase_Lib
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
@@ -28,8 +29,9 @@ SpreadSheet_Lib = SpreadSheetLib({
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mainservice%40quixotic-bonito-264311.iam.gserviceaccount.com"
 })
+fire_base_lib = FireBase_Lib('FrcScoutingWebsite/JsonFiles/serviceUser.json')
 
-save_data_frame = SaveDataFrame(SpreadSheet_Lib)
+save_data_frame = SaveDataFrame(SpreadSheet_Lib,fire_base_lib)
 SaveDataFrameOf_Games = SaveDataFrameOfGames()
 
 

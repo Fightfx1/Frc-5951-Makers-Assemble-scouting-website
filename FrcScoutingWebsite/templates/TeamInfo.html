@@ -4,20 +4,20 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 <html>
-    <div class="DataTable">
+    <div class="DataTable" style="margin-left: auto;margin-right: auto;">
         {% for table in tables %}
             {{ table|safe }}
         {% endfor %}
     </div>
-    <div class="Plots">
-        <img style="height:400px" src="data:image/png;base64, {{plots.Climb_Plot|safe}}">
+    <div class="Plots" >
+        <img  style="height:400px" src="data:image/png;base64, {{plots.Climb_Plot|safe}}">
         <img style="height:400px" src="data:image/png;base64, {{plots.Balls_Plot|safe}}">
         <img style="height:400px" src="data:image/png;base64, {{plots.Auton_Balls_Plot|safe}}">
         <img style="height:400px" src="data:image/png;base64, {{plots.roullte_Plot[0]|safe}}">
         <img style="height:400px" src="data:image/png;base64, {{plots.roullte_Plot[1]|safe}}">
         <img style="height:400px" src="data:image/png;base64, {{plots.broken_or_dc_plot|safe}}">
     </div>
-    <table style=" border: 0px solid black; text-align: center; margin: 30px;">
+    <table style=" border: 0px solid black; text-align: center; margin: 30px;margin-left: auto;margin-right: auto;">
         <td style=" border: 0px solid black; ">
             <h3 style="text-decoration: underline;"> {{text_boxs.Header1|safe}} </h3> 
             <p>
@@ -112,7 +112,10 @@
         padding: 8px;
         font-size: 16px;
     }
-    
+    .Plots{
+        margin-left: auto;
+        margin-right: auto;
+    }
     th, td {
       text-align: left;
       padding: 8px;
