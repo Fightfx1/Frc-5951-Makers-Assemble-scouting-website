@@ -1,4 +1,4 @@
-from FrcScoutingWebsite import app,save_data_frame, SpreadSheet_Lib
+from FrcScoutingWebsite import app,save_data_frame, SpreadSheet_Lib,save_data_frame_pit_scouting
 from flask import render_template
 import pandas as pd
 import io
@@ -46,10 +46,22 @@ class Text_Boxes:
         self.Header3 = "More Info "
         self.Header4 = "Robot Options"
     def __pit_scouting_data(self,TeamNumber):
-        df = pd.DataFrame(SpreadSheet_Lib.get_all_pit_scouting_data())
-        df = df[df['TeamNumber'] == int(TeamNumber)]
+        
+        df = save_data_frame_pit_scouting.get_dataframe()
+        
+        if df is None:
+            print("set pit scouting")
+            save_data_frame_pit_scouting.set_dataframe()
+            df = save_data_frame_pit_scouting.get_dataframe()
+        
         if df.empty:
             return
+        
+        df = df[df['TeamNumber'] == int(TeamNumber)]
+        
+        if df.empty:
+            return
+        
         self.Weight =str(df['Weight'].values[0])
         self.Propulsion_type = str(df['Propulsion_type'].values[0])
         self.Paddle_conversion = str(df['Paddle_conversion'].values[0])
@@ -157,6 +169,9 @@ def create_broken_or_dc_plot(df):
 @app.route('/GameData/TeamInfo/<TeamNumber>',methods=['GET', 'POST'])
 def team_info_page(TeamNumber):
     
+    
+
+
     def color_false_true(val):
         color = 'black'
         if val == True and type(val) is bool:

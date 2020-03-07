@@ -7,4 +7,5 @@ class SettingsForm(FlaskForm):
     EventCode = StringField('Event Code:',validators=[DataRequired()])
     Season = StringField('Season:',validators=[DataRequired()])
     tournamentLevel = SelectField('Tournament Level:',choices=[("qual","qualification matches"),("playoff","finals matches")],validators=[DataRequired])
+    Realod = SubmitField('Reload Data Base')
     submit = SubmitField('Save')

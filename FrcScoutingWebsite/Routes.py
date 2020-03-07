@@ -1,4 +1,4 @@
-from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule, SaveDataFrameOf_Games,scouters_lib, scouting_schedule_save
+from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule, SaveDataFrameOf_Games,scouters_lib, scouting_schedule_save,save_data_frame_pit_scouting,save_data_frame
 from flask import render_template, request, url_for, redirect, session
 from FrcScoutingWebsite.Forms import LoginForm, SettingsForm,AddMemberToTeam_Form
 
@@ -57,9 +57,16 @@ def settings_page():
     settings_form = SettingsForm()
 
     if request.method == "POST" and settings_form.validate_on_submit and  settings_form.is_submitted():
-        settings_lib.set_EventCode(str(settings_form.EventCode.data))
-        settings_lib.set_season(str(settings_form.Season.data))
-        settings_lib.set_tournamentLevel(str(settings_form.tournamentLevel.data))
+        if request.form.get('submit') != None:
+            settings_lib.set_EventCode(str(settings_form.EventCode.data))
+            settings_lib.set_season(str(settings_form.Season.data))
+            settings_lib.set_tournamentLevel(str(settings_form.tournamentLevel.data))
+        
+        elif request.form.get('Realod') != None:
+            save_data_frame_pit_scouting.set_dataframe()
+            save_data_frame.set_dataframe()
+        
+        return redirect(url_for("settings_page"))
        
     settings_form.EventCode.data = settings_lib.get_EventCode()
     settings_form.tournamentLevel.data = settings_lib.get_tournamentLevel()

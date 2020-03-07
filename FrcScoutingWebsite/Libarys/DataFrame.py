@@ -32,3 +32,15 @@ class SaveDataFrameOfGames:
 
     def get_dataframe(self):
         return self._privatedf
+
+
+class SaveDataFrameOfPitScouting:
+    def __init__(self,SpreadSheet_Lib):
+        self._privatedf = None
+        self.__SpreadSheet_Lib = SpreadSheet_Lib
+
+    def set_dataframe(self):
+        self._privatedf = pd.DataFrame(self.__SpreadSheet_Lib.get_all_pit_scouting_data())
+
+    def get_dataframe(self):
+        return self._privatedf

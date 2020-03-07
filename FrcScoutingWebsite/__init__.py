@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 from FrcScoutingWebsite.Libarys.UsersLib import Users_Lib
 from FrcScoutingWebsite.Libarys.SettingsLib import Settings
 from FrcScoutingWebsite.Libarys.FmsLib import Schedule
-from FrcScoutingWebsite.Libarys.DataFrame import SaveDataFrame, SaveDataFrameOfGames
+from FrcScoutingWebsite.Libarys.DataFrame import SaveDataFrame, SaveDataFrameOfGames,SaveDataFrameOfPitScouting
 from FrcScoutingWebsite.Libarys.SpredSheetLib import SpreadSheetLib
 from FrcScoutingWebsite.Libarys.ScoutersLib.Scouters_Lib import Scouters
 from FrcScoutingWebsite.Libarys.FireBaseLib import FireBase_Lib
@@ -31,7 +31,7 @@ SpreadSheet_Lib = SpreadSheetLib({
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mainservice%40quixotic-bonito-264311.iam.gserviceaccount.com"
 })
 fire_base_lib = FireBase_Lib('FrcScoutingWebsite/JsonFiles/serviceUser.json')
-
+save_data_frame_pit_scouting = SaveDataFrameOfPitScouting(SpreadSheet_Lib)
 save_data_frame = SaveDataFrame(SpreadSheet_Lib,fire_base_lib)
 SaveDataFrameOf_Games = SaveDataFrameOfGames()
 
