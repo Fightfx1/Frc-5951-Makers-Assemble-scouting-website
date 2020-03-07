@@ -135,14 +135,8 @@ def Event_Status_page():
     return render_template('EventStatus.html',plot1=plot1)
 
 
-
-
-
-
-
 def create_plot_for_climb(df):
-    df['Succeeded_Climb'] = df.Succeeded_Climb.astype('bool')
-    df['Succeeded_Climb'].value_counts(dropna=True).plot.pie(shadow=True,autopct='%1.2f%%',legend=True, colormap='jet').add_artist(plt.Circle((0,0),0.70,fc='white'))
+    df.loc[(df['Tried_To_Climb'] == True) | (df['Succeeded_Climb'] == True) | (df['Park'] == True)]['Succeeded_Climb'].value_counts(dropna=True).plot.pie(shadow=True,autopct='%1.2f%%',legend=True, colormap='jet').add_artist(plt.Circle((0,0),0.70,fc='white'))
     return render_plot() 
 def create_plot_for_balls(df):
     df.plot(y=['T_Hole','T_Hex','T_Low'],x='Match Number',kind='line', colormap='jet', marker='.',markersize=10,title="Teleop balls plot")
@@ -181,17 +175,15 @@ def team_info_page(TeamNumber):
     df = save_data_frame.get_dataframe()
     
     if df is None:
+        print("need to set")
         save_data_frame.set_dataframe()
         df = save_data_frame.get_dataframe()
 
     if df.empty:
         return render_template('TeamInfo.html',tables=[df.style.hide_index().render()])
 
-    
-    df = df.loc[df['Team Number'] == int(TeamNumber)]
-    
-    
-    
+    TeamNumber = int(TeamNumber)
+    df = df.loc[df['Team Number'] == TeamNumber]
     df = df.sort_values(by ='Match Number')
 
     plots = plots_class

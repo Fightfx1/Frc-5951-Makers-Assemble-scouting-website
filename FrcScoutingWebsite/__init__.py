@@ -7,9 +7,10 @@ from FrcScoutingWebsite.Libarys.DataFrame import SaveDataFrame, SaveDataFrameOfG
 from FrcScoutingWebsite.Libarys.SpredSheetLib import SpreadSheetLib
 from FrcScoutingWebsite.Libarys.ScoutersLib.Scouters_Lib import Scouters
 from FrcScoutingWebsite.Libarys.FireBaseLib import FireBase_Lib
+from FrcScoutingWebsite.Libarys.ScoutersSchedule.SaveScotersDataFrame import ScoutingScheduleSave
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-
+app.testing = False
 bootstrap = Bootstrap(app)
 
 users_lib = Users_Lib("FrcScoutingWebsite/JsonFiles/UsersLogininfo.json")
@@ -34,6 +35,7 @@ fire_base_lib = FireBase_Lib('FrcScoutingWebsite/JsonFiles/serviceUser.json')
 save_data_frame = SaveDataFrame(SpreadSheet_Lib,fire_base_lib)
 SaveDataFrameOf_Games = SaveDataFrameOfGames()
 
+scouting_schedule_save = ScoutingScheduleSave("FrcScoutingWebsite/Libarys/ScoutersSchedule/Schedules.npy")
 
 
 

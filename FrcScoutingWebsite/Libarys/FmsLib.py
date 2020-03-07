@@ -33,7 +33,18 @@ class Schedule:
 
         return red_teams,blue_teams
     
+    
+    
     def __fix_match(self,matchNumber,red_teams,blue_teams):
+        json_data = {"Match Number": matchNumber}
+        
+        for team in red_teams + blue_teams:
+            json_data[team['station']] = team['teamNumber']
+        
+        return json_data
+    
+    def fix_match(self,matchNumber,teams):
+        red_teams,blue_teams = teams
         json_data = {"Match Number": matchNumber}
         
         for team in red_teams + blue_teams:
@@ -66,7 +77,7 @@ class Schedule:
         i = 0
 
         for scouter in scouters:
-            if scouter not in lastgroup and i < 6:
+            if scouter['Name'] not in lastgroup and i < 6:
                 i+=1
                 team.append(scouter['Name'])
                 scouter['CountThatDid']+=6
@@ -79,7 +90,6 @@ class Schedule:
         for match_number in range(len(df)):
             if i == 5:
                 scouters_team = self.__get_new_team(scouters,last_group)
-                print(scouters_team)
                 df.loc[match_number-0.5] = [f"{match_number+1}-{match_number+6}"] + (scouters_team)
                 last_group = scouters_team
                 i = 0

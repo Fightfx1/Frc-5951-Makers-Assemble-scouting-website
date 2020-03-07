@@ -2,6 +2,13 @@
 
 {% block content %}
 <html>
+    <div align="right">
+        <form method="post" action="">
+            <input type="submit" name="submit_button" value="publish scouting schedule">
+        </form>
+        
+    </div>
+    
     {% block table %}
         {% for table in tables %}
             {{ table|safe }}

@@ -1,4 +1,4 @@
-from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule, SaveDataFrameOf_Games,scouters_lib
+from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule, SaveDataFrameOf_Games,scouters_lib, scouting_schedule_save
 from flask import render_template, request, url_for, redirect, session
 from FrcScoutingWebsite.Forms import LoginForm, SettingsForm,AddMemberToTeam_Form
 
@@ -69,14 +69,20 @@ def settings_page():
 
 
 
-@app.route('/ScoutingSchedule')
+@app.route('/ScoutingSchedule',methods=['GET','POST'])
 def Schedule_Page():
-    EventCode = settings_lib.get_EventCode()
-    if len(settings_lib.get_scouters(EventCode)) < 12:
+    if len(scouters_lib.get_all_scouters_names()) < 12:
         return render_template('Massege.html',Msg="Minimum 12 scouters to Create Schedule")
 
     scouting_sc = Schedule(settings_lib.get_season(),settings_lib.get_EventCode(),settings_lib.get_tournamentLevel())
-    df = scouting_sc.Get_Scouting_Schedule(settings_lib.get_scouters(settings_lib.get_EventCode()))
+    df = scouting_sc.Get_Scouting_Schedule(scouters_lib.get_all_scouters_names())
+
+    if request.method == 'POST':
+        if request.form.get('submit_button') == "publish scouting schedule":
+            scouting_schedule_save.update_Schedules(df,scouters_lib.get_all_scouters_names(),scouting_sc)
+            return redirect(url_for("Schedule_Page"))
+
+
     s = df.style.hide_index()
     def color_blue_at_blue(val):
         return 'background-color: #EEEEFF; color: #3F51B5'
