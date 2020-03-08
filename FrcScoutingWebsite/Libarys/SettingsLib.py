@@ -16,7 +16,12 @@ class Settings:
             file.close()
 
 
-
+    def get_to_use_file(self):
+        return self.__json_data['ToUseFile']
+    def set_to_use_file(self,ToUse):
+        self.__json_data['ToUseFile'] = ToUse
+        self.__update()
+        
     def get_EventCode(self):
         return self.__json_data['EventCode']
 
@@ -36,6 +41,13 @@ class Settings:
         self.__json_data['season'] = season
         self.__update()
     
+    def set_last_group(self,last_group):
+        self.__json_data['LastGroup'] = last_group
+        self.__update()
+
+    def get_last_group(self):
+        return self.__json_data['LastGroup']
+
     def get_scouters(self,team_name):
         if team_name in self.__json_data['Scouters_Teams']:
             return self.__json_data['Scouters_Teams'][team_name]

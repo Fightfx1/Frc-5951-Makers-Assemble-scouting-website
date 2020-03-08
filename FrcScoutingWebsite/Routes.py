@@ -1,6 +1,17 @@
 from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule, SaveDataFrameOf_Games,scouters_lib, scouting_schedule_save,save_data_frame_pit_scouting,save_data_frame
-from flask import render_template, request, url_for, redirect, session
+from flask import render_template, request, url_for, redirect, session, flash
 from FrcScoutingWebsite.Forms import LoginForm, SettingsForm,AddMemberToTeam_Form
+from werkzeug.utils import secure_filename
+import os
+
+
+UPLOAD_FOLDER = 'FrcScoutingWebsite/MatchesFile'
+ALLOWED_EXTENSIONS = {'csv'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/')
 @app.route('/home')
@@ -61,7 +72,23 @@ def settings_page():
             settings_lib.set_EventCode(str(settings_form.EventCode.data))
             settings_lib.set_season(str(settings_form.Season.data))
             settings_lib.set_tournamentLevel(str(settings_form.tournamentLevel.data))
+            settings_lib.set_to_use_file(settings_form.useFileYesNo.data)
         
+        
+        elif request.form.get('Upload') != None:
+
+            if 'file' not in request.files:
+                return redirect(request.url)
+
+            file = request.files['file']
+            
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+
+            if file and allowed_file(file.filename):
+                file.save(os.path.join(UPLOAD_FOLDER, "ScTrain.csv"))
+
         elif request.form.get('Realod') != None:
             save_data_frame_pit_scouting.set_dataframe()
             save_data_frame.set_dataframe()
@@ -71,6 +98,7 @@ def settings_page():
     settings_form.EventCode.data = settings_lib.get_EventCode()
     settings_form.tournamentLevel.data = settings_lib.get_tournamentLevel()
     settings_form.Season.data = settings_lib.get_season()
+    settings_form.useFileYesNo.data = settings_lib.get_to_use_file()
 
     return render_template('settings.html',settings_form=settings_form)
 
@@ -80,9 +108,13 @@ def settings_page():
 def Schedule_Page():
     if len(scouters_lib.get_all_scouters_names()) < 12:
         return render_template('Massege.html',Msg="Minimum 12 scouters to Create Schedule")
-
-    scouting_sc = Schedule(settings_lib.get_season(),settings_lib.get_EventCode(),settings_lib.get_tournamentLevel())
-    df = scouting_sc.Get_Scouting_Schedule(scouters_lib.get_all_scouters_names())
+    if settings_lib.get_to_use_file():
+        scouting_sc = Schedule(Exel_File="FrcScoutingWebsite/MatchesFile/ScTrain.csv")  
+    else:
+        scouting_sc = Schedule(settings_lib.get_season(),settings_lib.get_EventCode(),settings_lib.get_tournamentLevel())
+    
+    df,last_group = scouting_sc.Get_Scouting_Schedule(scouters_lib.get_all_scouters_names(),settings_lib.get_last_group())
+    settings_lib.set_last_group(last_group)
 
     if request.method == 'POST':
         if request.form.get('submit_button') == "publish scouting schedule":

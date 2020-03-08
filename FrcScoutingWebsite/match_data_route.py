@@ -105,7 +105,24 @@ def match_data(match_numebr):
 
     df = df.loc[df['Match Number'] == int(match_numebr)]
     
+    if df.empty:
+        return render_template('MatchData.html',tables=[df.style.hide_index().render()])
+    def color_blue_at_blue(val):
+        return 'background-color: #EEEEFF;'
+    def color_blue_at_red(val):
+        return 'background-color: #FFEEEE;'
+    def color_false_true(val):
+        color = 'black'
+        if val == True and type(val) is bool:
+            color = 'green'
+        elif val == False and type(val) is bool:
+            color = 'red'
+        elif val == "BLUE":
+            color = 'blue'
+        elif val == "RED":
+            color = 'red'
 
+        return 'color: %s' % color
     df_red_teams = df.loc[df['color'] == "RED"]
     df_blue_teams = df.loc[df['color'] == "BLUE"]
 
@@ -113,7 +130,7 @@ def match_data(match_numebr):
     fix_columns_names(df_blue_teams)
     fix_columns_names(df_red_teams)
     
-    return render_template('MatchData.html',tables=[(df_red_teams.style.hide_index().render(), "Red teams"),(df_blue_teams.style.hide_index().render(),"Blue teams")])
+    return render_template('MatchData.html',tables=[(df_red_teams.style.applymap(color_false_true).applymap(color_blue_at_red).hide_index().render(), "Red teams"),(df_blue_teams.style.applymap(color_false_true).applymap(color_blue_at_blue).hide_index().render(),"Blue teams")])
 
 
 

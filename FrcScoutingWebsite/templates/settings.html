@@ -6,7 +6,7 @@
     <br/>
     <br/>
     <div class="main">
-        <form action="#" method="post" style="font-size: 24px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; ">
+        <form action="#" method="post" enctype=multipart/form-data style="font-size: 24px; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; ">
             {{ settings_form.EventCode.label}}
             {{ settings_form.EventCode }}
             <br/>
@@ -16,11 +16,20 @@
             {{ settings_form.tournamentLevel.label}}
             {{settings_form.tournamentLevel}}
             <br/>
-            {{settings_form.submit}}
-            <br/><br/>
+            {{ settings_form.useFileYesNo.label}}
+            {{ settings_form.useFileYesNo }}
+            <br/>
+            {{settings_form.submit}}   
             {{settings_form.Realod}}
             {{ settings_form.csrf_token }}
+            <br/><br/><label>העלת משחקים כקובץ</label><br/><br/>
+            
+            <div style="display: inline-flex; align-items: center;">
+                <input type=submit name="Upload" value=Upload>
+                <input type=file name=file>
+            </div>
         </form>
+        
     </div>
 </html>
 

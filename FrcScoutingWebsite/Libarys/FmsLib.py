@@ -6,8 +6,10 @@ pd.options.display.max_rows = 999
 
 class Schedule:
     def __init__(self, season="",eventCode="",tournamentLevel="",Exel_File=None):    
+        
         if not Exel_File is None:
-            self.__df = pd.DataFrame(Exel_File)
+            self.__df = pd.read_csv(Exel_File)
+        
         else:
             self.__df = None
             self._season = season
@@ -32,8 +34,6 @@ class Schedule:
                     blue_teams.append(team)
 
         return red_teams,blue_teams
-    
-    
     
     def __fix_match(self,matchNumber,red_teams,blue_teams):
         json_data = {"Match Number": matchNumber}
@@ -83,10 +83,8 @@ class Schedule:
                 scouter['CountThatDid']+=6
         return team
                            
-    def __append_scouters(self,df,scouters):
+    def __append_scouters(self,df,scouters,last_group):
         i = 5
-        last_group = []
-
         for match_number in range(len(df)):
             if i == 5:
                 scouters_team = self.__get_new_team(scouters,last_group)
@@ -95,18 +93,20 @@ class Schedule:
                 i = 0
             else:
                 i = i + 1
+        self.__lastgroup = last_group
 
-    def Get_Scouting_Schedule(self,scouters):
+    def Get_Scouting_Schedule(self,scouters,last_group=[]):
+        self.__lastgroup = []
         if not self.__df is None:
             scouters = self.__create_scouters_cards(scouters) # create scouters cards
-            self.__append_scouters(self.__df,scouters)
+            self.__append_scouters(self.__df,scouters,last_group)
             self.__df = self.__df.sort_index()
-            return self.__df
+            return self.__df,self.__lastgroup
         
         
         df = self.get_all_matches_in_datafarme()
         scouters = self.__create_scouters_cards(scouters) # create scouters cards
-        self.__append_scouters(df,scouters)
+        self.__append_scouters(df,scouters,last_group)
         df = df.sort_index()
-        return df
+        return df,self.__lastgroup
         
