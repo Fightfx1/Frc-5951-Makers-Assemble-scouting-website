@@ -1,8 +1,9 @@
-from FrcScoutingWebsite import app, users_lib, settings_lib,Schedule, SaveDataFrameOf_Games,scouters_lib, scouting_schedule_save,save_data_frame_pit_scouting,save_data_frame
+from FrcScoutingWebsite import app, settings_lib,Schedule, SaveDataFrameOf_Games,scouters_lib, scouting_schedule_save,save_data_frame_pit_scouting,save_data_frame
 from flask import render_template, request, url_for, redirect, session, flash
 from FrcScoutingWebsite.Forms import LoginForm, SettingsForm,AddMemberToTeam_Form
 from werkzeug.utils import secure_filename
 import os
+from flask_login import login_required, login_user,logout_user,current_user
 
 
 UPLOAD_FOLDER = 'FrcScoutingWebsite/MatchesFile'
@@ -13,12 +14,18 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+
+
 @app.route('/')
 @app.route('/home')
 def index_page():
     return render_template('index.html')
 
+
+
+
 @app.route("/Matches")
+@login_required
 def all_matches_page():
     def make_click_able(df):
         df['Match Number'] = df['Match Number'].apply(lambda x: f'<a href="{url_for("match_data",match_numebr=x)}">{x}</a>')
@@ -63,7 +70,12 @@ def all_matches_page():
  
 
 
+
+
+
+
 @app.route('/SettingsPage',methods=['GET','POST'])
+@login_required
 def settings_page():
     settings_form = SettingsForm()
 
@@ -102,9 +114,8 @@ def settings_page():
 
     return render_template('settings.html',settings_form=settings_form)
 
-
-
 @app.route('/ScoutingSchedule',methods=['GET','POST'])
+@login_required
 def Schedule_Page():
     if len(scouters_lib.get_all_scouters_names()) < 12:
         return render_template('Massege.html',Msg="Minimum 12 scouters to Create Schedule")
@@ -135,6 +146,7 @@ def Schedule_Page():
     return render_template('ScoutingSchedule.html',tables=[s.hide_index().render()])
 
 @app.route('/Scouters_setup',methods=['GET','POST'])
+@login_required
 def scouters_setup_page():
     if scouters_lib.EventCode != settings_lib.get_EventCode():
         scouters_lib.update_event_code(settings_lib.get_EventCode())
@@ -151,19 +163,6 @@ def scouters_setup_page():
 
 
 
-
-@app.route('/Login',methods=['GET','POST'])
-def login_page():
-    login_form = LoginForm()
-    
-    if request.method == "POST" and login_form.validate_on_submit and login_form.is_submitted():
-        if users_lib.Login(login_form.username.data,login_form.password.data):
-            session['logged_in'] = True
-            return redirect(url_for("index_page"))
-
-    return render_template('login.html',form=login_form)
-
-@app.route('/Logout')
-def logout_page():
-    session['logged_in'] = False
-    return render_template('index.html') 
+@app.errorhandler(401)
+def custom_401(error):
+    return redirect(url_for('login_page'))

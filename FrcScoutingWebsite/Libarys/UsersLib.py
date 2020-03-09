@@ -1,20 +1,38 @@
-import json
+from FrcScoutingWebsite import db
+from sqlalchemy.ext.hybrid import hybrid_property
+import bcrypt
 
-class Users_Lib:
-    def __init__(self,path_to_json_settings):
-        self.__path_to_file = path_to_json_settings
-        self.__get_data()
-        
-    def __update(self):
-        with open(self.__path_to_file,'w') as file:
-            json.dump(self.__json_data,file)
-            file.close()
+class User(db.Model):
+    """An admin user capable of viewing reports.
 
-    def __get_data(self):
-        with open(self.__path_to_file,'r') as file:
-            self.__json_data = json.load(file)
-            file.close()
-    
-    def Login(self,username,password):
-        user_model = {"UserName":username,"Pass":password,"id":1}
-        return user_model in self.__json_data['Users']
+    :param str email: email address of user
+    :param str password: encrypted password for the user
+
+    """
+    __tablename__ = 'user'
+    username = db.Column(db.String, primary_key=True)
+    password = db.Column(db.String,nullable=False)
+    authenticated = db.Column(db.Boolean, default=False, nullable=False)
+    role = db.Column(db.String , default="Queen" , nullable=False)
+
+    def get_role(self):
+        return self.role
+
+    def is_admin(self):
+        return self.role == 'Admin' and self.authenticated
+
+    def is_active(self):
+        """True, as all users are active."""
+        return True
+
+    def get_id(self):
+        """Return the email address to satisfy Flask-Login's requirements."""
+        return self.username
+
+    def is_authenticated(self):
+        """Return True if the user is authenticated."""
+        return self.authenticated
+
+    def is_anonymous(self):
+        """False, as anonymous users aren't supported."""
+        return False

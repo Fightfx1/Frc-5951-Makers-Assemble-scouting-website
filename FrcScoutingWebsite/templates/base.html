@@ -16,7 +16,8 @@
         <li class="nav-item">
            <a class="nav-link active" href="{{ url_for('index_page') }}" style="size: 24px; color: black;">Home</a>
         </li>
-        {% if session['logged_in'] %}
+        {% if current_user.is_authenticated %}
+
             
             <li class="nav-item" style="size: 12px; color: black;">
                 <a class="nav-link active" href="{{ url_for('all_matches_page') }}"  style="size: 24px; color: black;">Matches Data</a>

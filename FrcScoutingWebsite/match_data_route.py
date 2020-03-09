@@ -6,6 +6,7 @@ import base64
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
+from flask_login import login_required, login_user,logout_user,current_user
 
 matplotlib.use('Agg')   # פותר בעיה במחשבים שרצים במערכת הפעלה מקינטוש או מחשבים שרצים ב86 ביט
 
@@ -93,6 +94,7 @@ def fix_columns_names(df):
 
 
 @app.route("/MatchData/<match_numebr>")
+@login_required
 def match_data(match_numebr):
     df = save_data_frame.get_dataframe()
     
@@ -149,6 +151,7 @@ def render_plot():
 
 
 @app.route('/EventStatus')
+@login_required
 def Event_Status_page():
     df = save_data_frame.get_dataframe()
     
@@ -184,6 +187,7 @@ def create_broken_or_dc_plot(df):
 
 
 @app.route('/GameData/TeamInfo/<TeamNumber>',methods=['GET', 'POST'])
+@login_required
 def team_info_page(TeamNumber):
     
     
