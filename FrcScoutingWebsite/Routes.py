@@ -162,10 +162,3 @@ def scouters_setup_page():
     return render_template('scouters_setup_page.html',ScoutersNames=scouters_lib.get_all_scouters_names(),districName="District: "+str(settings_lib.get_EventCode()).capitalize(),add_scouter_form=add_scouter_form)
 
 
-
-
-
-@app.errorhandler(403)
-@app.errorhandler(401)
-def custom_401_403(error):
-    return redirect(url_for('login_page'))
