@@ -1,4 +1,4 @@
-from FrcScoutingWebsite import app,save_data_frame, SpreadSheet_Lib,save_data_frame_pit_scouting
+from FrcScoutingWebsite import app,save_data_frame, SpreadSheet_Lib,save_data_frame_pit_scouting,db
 from flask import render_template
 import pandas as pd
 import io
@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 from flask_login import login_required, login_user,logout_user,current_user
+from FrcScoutingWebsite.Libarys.UsersLib import Logs
 
 matplotlib.use('Agg')   # פותר בעיה במחשבים שרצים במערכת הפעלה מקינטוש או מחשבים שרצים ב86 ביט
 
@@ -51,7 +52,9 @@ class Text_Boxes:
         df = save_data_frame_pit_scouting.get_dataframe()
         
         if df is None:
-            print("set pit scouting")
+            new_log = Logs(username=current_user.username,action="setup database in Pit Scouting")
+            db.session.add(new_log)
+            db.session.commit()
             save_data_frame_pit_scouting.set_dataframe()
             df = save_data_frame_pit_scouting.get_dataframe()
         
@@ -99,6 +102,9 @@ def match_data(match_numebr):
     df = save_data_frame.get_dataframe()
     
     if df is None:
+        new_log = Logs(username=current_user.username,action="setup database in MatchData")
+        db.session.add(new_log)
+        db.session.commit()
         save_data_frame.set_dataframe()
         df = save_data_frame.get_dataframe()
 
@@ -156,10 +162,21 @@ def Event_Status_page():
     df = save_data_frame.get_dataframe()
     
     if df is None:
+        
+        new_log = Logs(username=current_user.username,action="setup database in EventStatus")
+        db.session.add(new_log)
+        db.session.commit()
+
         save_data_frame.set_dataframe()
         df = save_data_frame.get_dataframe()
+
+    if df.empty:
+        return render_template('EventStatus.html',plot1=None)
+
     df = df.groupby('Team Number')['T_Hole','T_Hex','T_Low'].mean()
-    df = df.sort_values(by=['T_Hole','T_Hex','T_Low'],ascending=True)
+
+    print(df)
+    df = df.sort_values(by=['T_Hex','T_Hole','T_Low'])
     ax = df.plot(kind='barh',colormap='jet',figsize=(20,30),zorder=2, width=0.5,align='center',linestyle=':')
     for p in ax.patches:
         plt.text(p.get_x() + p.get_width()+0.019, p.get_y()+0.017,str(np.ceil(p.get_width())))
@@ -211,7 +228,9 @@ def team_info_page(TeamNumber):
     df = save_data_frame.get_dataframe()
     
     if df is None:
-        print("need to set")
+        new_log = Logs(username=current_user.username,action="setup database in TeamInfo")
+        db.session.add(new_log)
+        db.session.commit()
         save_data_frame.set_dataframe()
         df = save_data_frame.get_dataframe()
 
@@ -220,7 +239,7 @@ def team_info_page(TeamNumber):
 
     TeamNumber = int(TeamNumber)
     df = df.loc[df['Team Number'] == TeamNumber]
-    df = df.sort_values(by ='Match Number')
+    # df = df.sort_values(by ='Match Number')
 
     plots = plots_class
     plots.Climb_Plot = create_plot_for_climb(df)
@@ -232,4 +251,4 @@ def team_info_page(TeamNumber):
     
     
     fix_columns_names(df)
-    return render_template('TeamInfo.html',tables=[df.style.applymap(color_false_true).hide_index().render()],plots=plots,text_boxs=text_boxs)
+    return render_template('TeamInfo.html',tables=[df.style.applymap(color_false_true).hide_index().render()],plots=plots,text_boxs=text_boxs,TeamName="FRC #"+str(TeamNumber))

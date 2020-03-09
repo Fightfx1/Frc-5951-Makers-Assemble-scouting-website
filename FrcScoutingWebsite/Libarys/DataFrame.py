@@ -14,6 +14,7 @@ class SaveDataFrame:
         if not self._privatedf.empty:
             self._privatedf = self._privatedf.loc[~self._privatedf['comments'].isin(['T'])]
             self._privatedf['comments'] = self._privatedf['comments'].replace(0,"")
+            self._privatedf = self._privatedf.sort_values(by=['Team Number','Match Number'],ascending=[True, True])
 
     def get_dataframe(self):
         return self._privatedf

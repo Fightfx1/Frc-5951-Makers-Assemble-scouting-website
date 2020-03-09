@@ -1,11 +1,12 @@
 from FrcScoutingWebsite import app,db,login_manager,salt
 from FrcScoutingWebsite.Forms import LoginForm
 from flask import render_template, request, url_for, redirect, session, flash
-from FrcScoutingWebsite.Libarys.UsersLib import User
+from FrcScoutingWebsite.Libarys.UsersLib import User,Logs
 from flask_login import login_required, login_user,logout_user,current_user
 import bcrypt
 from flask_admin import Admin,AdminIndexView
 from flask_admin.contrib.sqla import ModelView
+from werkzeug.exceptions import HTTPException
 
 
 @login_manager.user_loader
@@ -75,5 +76,33 @@ class MyModel(ModelView):
         except:
             return False
 
+
+@app.route('/adminxxxx')
+def admin_page():
+    return redirect('/admin')
+
 admin = Admin(app,template_mode='bootstrap3',index_view=MyAdminIndexView())
 admin.add_view(MyModel(User, db.session))
+admin.add_view(ModelView(Logs, db.session))
+
+
+@app.errorhandler(403)
+@app.errorhandler(401)
+def custom_401_403(error):
+    new_log = Logs(username=str(request.remote_addr),action="Tryied to get in error type: " + str(error))
+    db.session.add(new_log)
+    db.session.commit()
+    return redirect(url_for('login_page'))
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # pass through HTTP errors
+    if isinstance(e, HTTPException):
+        return e
+
+    new_log = Logs(username=str(request.remote_addr),action="Tryied to get in error type: " + str(e))
+    db.session.add(new_log)
+    db.session.commit()
+
+    return render_template("errorspage/500.html", e=e), 500

@@ -2,25 +2,28 @@
 
 {% block content %}
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Scouting Data</title>
-    </head>
-    <body>
-        {% for table in tables %}
-            {{ table|safe }}
-        {% endfor %}
+<html  lang="en">
+    <div id="header">
+        <h1><div align="center"><span style="font-family: '@Yu Gothic Light', 'Cascadia Code', FrankRuehl; font-weight: normal; font-style: normal; text-decoration: none;"><font size="7">Matches</font></span></div></h1>
+   </div>
+    <body style=" background-color: #F2FFF2">
+        <div align="center">
+            {% for table in tables %}
+                {{ table|safe }}
+            {% endfor %}
+        </div>
     </body>
 </html>
 <style>
     table {
-       margin: 30px;
-      border-collapse: collapse;
-      width: 90%;
+        margin: auto;
+        border-collapse: collapse;
+        width: 60%;
+        background-color: white;
     }
     table,th,td {
       border: 1px solid black;
+      
     }
     
     th, td {

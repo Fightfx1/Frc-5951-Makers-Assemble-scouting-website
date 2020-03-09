@@ -13,8 +13,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
-
+@app.route('/static/<path>')
+def static_file(path):
+  return app.send_static_file(path)
 
 @app.route('/')
 @app.route('/home')
@@ -163,6 +164,8 @@ def scouters_setup_page():
 
 
 
+
+@app.errorhandler(403)
 @app.errorhandler(401)
-def custom_401(error):
+def custom_401_403(error):
     return redirect(url_for('login_page'))

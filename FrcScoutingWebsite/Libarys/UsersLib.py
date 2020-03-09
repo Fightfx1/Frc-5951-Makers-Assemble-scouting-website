@@ -19,7 +19,7 @@ class User(db.Model):
         return self.role
 
     def is_admin(self):
-        return self.role == 'Admin' and self.authenticated
+        return (self.role == 'Admin' and self.authenticated)
 
     def is_active(self):
         """True, as all users are active."""
@@ -36,3 +36,10 @@ class User(db.Model):
     def is_anonymous(self):
         """False, as anonymous users aren't supported."""
         return False
+
+
+class Logs(db.Model):
+    __tablename__ = 'logs'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String)
+    action = db.Column(db.String,nullable=False)
