@@ -5,8 +5,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
 <html>
     <div id="header">
-        <h1><div align="center"><span style="font-family: '@Yu Gothic Light', 'Cascadia Code', FrankRuehl; font-weight: normal; font-style: normal; text-decoration: none;"><font size="7">{{TeamName|safe}}</font></span></div></h1>
-   </div>
+        <h1><div align="center"><span style="font-family: '@Yu Gothic Light', 'Cascadia Code', FrankRuehl; font-weight: normal; font-style: normal; text-decoration: none;"><font size="7">{{TeamName|safe}} </font></span><img width="50px" height="50px" src="data:image/png;base64,{{team_Avatar|safe}}"></div></h1>
+        
+    </div>
     <div class="DataTable" style="margin-left: auto;margin-right: auto;">
         {% for table in tables %}
             {{ table|safe }}
@@ -125,4 +126,6 @@
       text-align: center;
     }
 </style>
+
+
 {% endblock %}

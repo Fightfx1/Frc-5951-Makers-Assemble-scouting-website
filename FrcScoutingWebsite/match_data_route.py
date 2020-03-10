@@ -8,7 +8,7 @@ import matplotlib
 import numpy as np
 from flask_login import login_required, login_user,logout_user,current_user
 from FrcScoutingWebsite.Libarys.UsersLib import Logs
-
+from FrcScoutingWebsite.Libarys.FmsLib import get_team_avatar
 matplotlib.use('Agg')   # פותר בעיה במחשבים שרצים במערכת הפעלה מקינטוש או מחשבים שרצים ב86 ביט
 
 class plots_class:
@@ -249,6 +249,6 @@ def team_info_page(TeamNumber):
     plots.broken_or_dc_plot = create_broken_or_dc_plot(df)
     text_boxs = Text_Boxes(df,TeamNumber)
     
-    
+    team_Avatar=get_team_avatar(TeamNumber,2020)
     fix_columns_names(df)
-    return render_template('TeamInfo.html',tables=[df.style.applymap(color_false_true).hide_index().render()],plots=plots,text_boxs=text_boxs,TeamName="FRC #"+str(TeamNumber))
+    return render_template('TeamInfo.html',tables=[df.style.applymap(color_false_true).hide_index().render()],plots=plots,text_boxs=text_boxs,TeamName="FRC #"+str(TeamNumber),team_Avatar=team_Avatar)

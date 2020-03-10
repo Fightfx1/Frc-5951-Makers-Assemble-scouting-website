@@ -4,7 +4,7 @@ from FrcScoutingWebsite.Forms import LoginForm, SettingsForm,AddMemberToTeam_For
 from werkzeug.utils import secure_filename
 import os
 from flask_login import login_required, login_user,logout_user,current_user
-
+from FrcScoutingWebsite.Libarys.FmsLib import get_team_avatar
 
 UPLOAD_FOLDER = 'FrcScoutingWebsite/MatchesFile'
 ALLOWED_EXTENSIONS = {'csv'}
@@ -20,6 +20,7 @@ def static_file(path):
 @app.route('/')
 @app.route('/home')
 def index_page():
+
     return render_template('index.html')
 
 
