@@ -112,7 +112,7 @@ class Schedule:
         
 
 def get_team_avatar(teamNumber,season):
-    headers = {"Authorization":"Basic ZmlnaHRmeDE6Q0M1MkI0MzctMkZDQy00MDRELTkwQUYtOTU4MUJCMDcxQTY3",'Accept': 'application/json'}
+    headers = {"Authorization":"Basic your token",'Accept': 'application/json'}
     __url__ = f"https://frc-api.firstinspires.org/v2.0/{season}/avatars?teamNumber={teamNumber}"
     try:
         r = requests.get(__url__,headers=headers)
