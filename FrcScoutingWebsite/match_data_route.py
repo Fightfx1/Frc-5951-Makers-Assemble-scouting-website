@@ -175,7 +175,6 @@ def Event_Status_page():
 
     df = df.groupby('Team Number')['T_Hole','T_Hex','T_Low'].mean()
 
-    print(df)
     df = df.sort_values(by=['T_Hex','T_Hole','T_Low'])
     ax = df.plot(kind='barh',colormap='jet',figsize=(20,30),zorder=2, width=0.5,align='center',linestyle=':')
     for p in ax.patches:
